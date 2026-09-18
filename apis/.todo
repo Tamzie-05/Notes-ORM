@@ -1,0 +1,2 @@
+Create a util for password hashing using bycrypt
+Create authentication endpoints (register, forgot-password)
