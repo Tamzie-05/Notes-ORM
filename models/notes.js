@@ -15,6 +15,7 @@ const notes = sequelize.define("notes",{
         date: {
             type: Sequelize.DATE,
             allowNull: false,
+            defaultValue: Sequelize.NOW
         },
         userId: {
             type: Sequelize.INTEGER,

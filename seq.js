@@ -21,7 +21,7 @@ categories.hasMany(notes, {
 });
 
 sequelize
-    .sync({ force: true })
+    .sync({ alter : true })
 
     .then(async () => {
 
