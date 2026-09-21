@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs')
+const { hashPassword } = require('../util/passwords');
 
 const User = require('../models/users')
 
@@ -27,7 +27,7 @@ resetPassword.post('/',async(req,res)=>{
         if(!user){
             return res.status(404).json({message:'User not found'});
         }
-        const hashedPassword = await bcrypt.hash(newPassword,10);
+        const hashedPassword = await hashPassword(newPassword);
         await user.update({password : hashedPassword});
         res.json({message:'Password reset successful'});
     }catch(err){

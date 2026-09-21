@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs');
 const User = require('../models/users');
+const { hashPassword } = require('../util/passwords');
 const express = require('express');
 require('dotenv').config()
 
@@ -12,7 +12,7 @@ register.post('/',async(req,res)=>{
             return res.status(422).json({message:"All fields are required"});
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hashPassword(password);
 
         const existingUser = await User.findOne({
             where:{email:email}

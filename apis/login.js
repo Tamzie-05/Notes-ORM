@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const { comparePassword } = require('../util/passwords');
 const User = require('../models/users');
 const express = require('express');
 require('dotenv').config()
@@ -16,10 +16,8 @@ login.post('/',async(req,res)=>{
         });
         if(!user){return res.status(404).json({message:'User not found'});
         }
-        const passwordCorrect = await bcrypt.compare(
-            password,
-            user.password
-        );
+        const passwordCorrect = await comparePassword( password, user.password );
+
         if(!passwordCorrect){
             return res.status(401).json({message:'Password Incorrect'});
         }
