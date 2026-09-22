@@ -5,6 +5,7 @@ const login = require('./apis/login.js')
 const register = require('./apis/register.js')
 const forgotPassword = require('./apis/forgotpassword.js')
 const resetPassword = require('./apis/resetpassword.js')
+const refreshToken = require('./apis/refreshtoken.js')
 const authenticateToken = require('./middleware/authenticateToken.js');
 const notes = require('./apis/notes.js')
 const app = express();
@@ -16,6 +17,7 @@ app.use('/signup', register);
 app.use('/forgot',forgotPassword)
 app.use('/notes',authenticateToken,notes)
 app.use('/reset',resetPassword)
+app.use('/refresh',refreshToken)
 
 
 app.get('/me', authenticateToken, (req, res) => {

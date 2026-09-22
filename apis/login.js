@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken');
 const { comparePassword } = require('../util/passwords');
 const User = require('../models/users');
+const validate =  require('../middleware/validate')
+const {loginSchema} = require('../validations/authvalidation')
 const express = require('express');
 require('dotenv').config()
 
 const login = express.Router();
 
-login.post('/',async(req,res)=>{
+login.post('/',validate(loginSchema),async(req,res)=>{
     try{
         const{email, password} = req.body;
         const user = await User.findOne({
@@ -21,16 +23,24 @@ login.post('/',async(req,res)=>{
         if(!passwordCorrect){
             return res.status(401).json({message:'Password Incorrect'});
         }
-        const token = jwt.sign({
+        const accessToken = jwt.sign({
             id:user.id,
             email:user.email
         },
-        process.env.JWT_SECRET,
-        { expiresIn : '1h'}
+        process.env.JWT_SECRET,{ expiresIn : '1h'}
     );
+
+        const refreshToken = jwt.sign({
+            id : user.id,
+            email : user.email
+        },
+        process.env.REFRESH_TOKEN_SECRET,{ expiresIn : '1d'}
+    );
+
     res.json({
         message:'Login successful',
-        token:token
+        accessToken:accessToken,
+        refreshToken:refreshToken
     });
     }catch(err){
         res.status(500).json({message: err.message})

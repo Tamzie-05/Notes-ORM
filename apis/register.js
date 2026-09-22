@@ -1,11 +1,13 @@
 const User = require('../models/users');
 const { hashPassword } = require('../util/passwords');
 const express = require('express');
+const validate = require('../middleware/validate')
+const {registerSchema} = require('../validations/authvalidation')
 require('dotenv').config()
 
 const register = express.Router();
 
-register.post('/',async(req,res)=>{
+register.post('/',validate(registerSchema),async(req,res)=>{
     try{
         const{name,email,password}=req.body;
         if(!name?.trim() || !email?.trim() || !password?.trim()){
